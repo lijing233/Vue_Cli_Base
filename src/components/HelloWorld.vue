@@ -126,6 +126,9 @@ export default {
     this.$http.post('/user/home/logout', {}).then(req => {
       console.log(req)
     })
+    // this.$http.post('/tbl/investigation/info', { answer: {}, type: 1 }).then(res => {
+    //   console.log(res)
+    // })
   }
 }
 </script>

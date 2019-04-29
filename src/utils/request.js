@@ -1,5 +1,6 @@
 import axios from 'axios'
 import jsCookie from 'js-cookie'
+import Message from '@/plugins/Message'
 
 axios.defaults.withCredentials = true
 
@@ -9,7 +10,7 @@ axios.interceptors.request.use(
   },
   error => {
     // Do something with request error
-    console.log('interceptors-request-error' + error) // for debug
+    console.log(`interceptors-request-error${error}`) // for debug
     Promise.reject(error)
   }
 )
@@ -20,7 +21,7 @@ axios.interceptors.response.use(
     return response
   },
   error => {
-    console.log('interceptors-response-error' + error) // for debug
+    console.log(`interceptors-response-error${error}`) // for debug
     return Promise.resolve(error.response)
   }
 )
@@ -45,10 +46,12 @@ const codeMessage = {
 
 // 检查接口状态码
 function checkStatus (response) {
+  console.log(response)
   if (response.status >= 200 && response.status < 300) {
     return response
   }
   const errortext = codeMessage[response.status] || response.statusText
+  Message(`网络异常 ${response.status}: ${errortext}`)
   const error = new Error(errortext)
   error.name = response.status
   error.response = response
@@ -57,23 +60,26 @@ function checkStatus (response) {
 
 // 检查请求返回值
 function checkCode (response) {
-  if (response.data.code !== 200) {
-    const error = new Error(response.data.message)
-    error.name = response.data.code
-    error.response = response.data
-    throw error
+  if (response.data.code !== 200 && response.config.showErrToast) {
+    Message(response.data)
+    // const error = new Error(response.data.message)
+    // error.name = response.data.code
+    // error.response = response.data
+    // throw error
   }
   return response
 }
 
 function errorCatch (error) {
-  console.log('request-error-catch', error)
-  const status = error.name
-  if (status === 101) {
-    jsCookie.remove('token')
-    jsCookie.remove('phone')
-    window.location = '/login'
-  }
+  console.log('axios-error-catch', error)
+  // console.log(error.response)
+  // 未登录处理
+  // const status = error.name
+  // if (status === 101) {
+  //   jsCookie.remove('token')
+  //   jsCookie.remove('phone')
+  //   window.location = '/login'
+  // }
 }
 
 // axios默认值

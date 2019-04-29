@@ -60,7 +60,9 @@ module.exports = {
     'vue/attribute-hyphenation': 'error',
     'vue/html-closing-bracket-newline': 'error',
     'vue/html-closing-bracket-spacing': 'error',
-    'vue/html-end-tags': 'error'
+    'vue/html-end-tags': 'error',
+    // add
+    "prefer-template": 2,
   },
 
   parserOptions: {

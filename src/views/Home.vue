@@ -3,6 +3,7 @@
     <img
       alt="Vue logo"
       src="../assets/logo.png"
+      @click="showMsg"
     >
     <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
@@ -16,6 +17,11 @@ export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  methods: {
+    showMsg () {
+      this.$message('sss')
+    }
   }
 }
 </script>
